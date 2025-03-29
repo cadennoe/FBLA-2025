@@ -30,5 +30,7 @@ existing entries and offers a search and filter option to easily find specific t
   - Icons
 - Bootstrap
   - Starter CSS Library
+- Maven
+  - Builds and runs project
 
 No copyrighted material used.
