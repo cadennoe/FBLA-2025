@@ -1,4 +1,4 @@
-# Goal
+# Goal for FBLA 2025
 
 My goal was to create a program that helps students manage their personal finances by tracking account
 balances, income and expenses. The program allows users to input details about their
