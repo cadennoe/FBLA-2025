@@ -11,12 +11,20 @@ public class Account {
 	
 	private List<IncomeAndExpense> incomeAndExpenseList = new ArrayList<>();
 	
+	/**
+	 * add incomes and expenses and sorts them
+	 * @param income new income or expense
+	 */
 	public void addIncomeOrExpense(IncomeAndExpense income) {
 
 		incomeAndExpenseList.add(income);
 		incomeAndExpenseList.sort(Comparator.comparing(IncomeAndExpense::getDate).reversed());
 	}
 
+	/**
+	 * deletes incomes and expenses
+	 * @param id of income or expense to delete
+	 */
  	public void deleteIncomeOrExpense(int id) {
  		IncomeAndExpense found = null;
  		
@@ -31,6 +39,10 @@ public class Account {
  		}
  	}
 	
+ 	/**
+ 	 * starting at 0, add all incomes, subtracts all expenses
+ 	 * @return total balance
+ 	 */
 	public double getMoney() {
 		double money = 0.0;
 		for (IncomeAndExpense incomeAndExpense : incomeAndExpenseList) {

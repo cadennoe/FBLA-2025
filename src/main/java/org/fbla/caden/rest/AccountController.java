@@ -31,8 +31,11 @@ public class AccountController {
 		this.account = new Account();
 	}
 	
-
-	
+	/**
+	 * Initializes page on first viewing
+	 * @param model for html
+	 * @return page to move to
+	 */
 	@GetMapping("/")
 	public String index(Model model) {
 		this.filter = Filter.ALL;
@@ -42,6 +45,13 @@ public class AccountController {
 		return "account.html";
 	}
 	
+	/**
+	 * add a new income or expense
+	 * updates total balance
+	 * @param model for html
+	 * @param income from html for new income or expense
+	 * @return page to move to
+	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, params = "add")
 	public String addNew(Model model, @ModelAttribute("income") IncomeAndExpense income) {
 		System.out.println("adding " + income.getAmount());
@@ -56,6 +66,12 @@ public class AccountController {
 		return "account.html";
 	}
 	
+	/**
+	 * edits existing income or expense
+	 * @param model for html
+	 * @param income from html to edit
+	 * @return page to move to
+	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, params = "edit")
 	public String addEdit(Model model, @ModelAttribute("income") IncomeAndExpense income) {
 		IncomeAndExpense found = null;
@@ -77,12 +93,24 @@ public class AccountController {
 		return "account.html";
 	}
 	
+	/**
+	 * when user cancels, resets to empty as normal
+	 * @param model for html
+	 * @param income from html to cancel
+	 * @return page to move to
+	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, params = "cancel")
 	public String addCancel(Model model, @ModelAttribute("income") IncomeAndExpense income) {
 		buildModel(model);
 		return "account.html";
 	}
 	
+	/**
+	 * delete existing income or expense
+	 * @param id of income or expense to delete
+	 * @param model for html
+	 * @return page to move to
+	 */
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
 	public String delete(@PathVariable int id, Model model) {
 		
@@ -92,6 +120,12 @@ public class AccountController {
 		return "account.html";
 	}
 	
+	/**
+	 * turning on edit mode
+	 * @param id of selected income or expense
+	 * @param model for html
+	 * @return page to move to
+	 */
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable int id, Model model) {
 		
@@ -112,14 +146,23 @@ public class AccountController {
 		return "account.html";
 	}
 	
-	
+	/**
+	 * filters all incomes and expenses
+	 * @param model for html
+	 * @return page to move to
+	 */
 	@RequestMapping(value = "/filter", method = RequestMethod.POST, params = "all")
 	public String filterAll(Model model) {
 		this.filter = Filter.ALL;
 		buildModel(model);
 		return "account.html";
 	}
-	
+
+	/**
+	 * filters all incomes
+	 * @param model for html
+	 * @return page to move to
+	 */
 	@RequestMapping(value = "/filter", method = RequestMethod.POST, params = "income")
 	public String filterIncome(Model model) {
 		this.filter = Filter.INCOME;
@@ -127,6 +170,11 @@ public class AccountController {
 		return "account.html";
 	}
 	
+	/**
+	 * filters all expenses
+	 * @param model for html
+	 * @return page to move to
+	 */
 	@RequestMapping(value = "/filter", method = RequestMethod.POST, params = "expense")
 	public String filterExpense(Model model) {
 		this.filter = Filter.EXPENSE;
@@ -134,6 +182,12 @@ public class AccountController {
 		return "account.html";
 	}
 
+	/**
+	 * searches for categories
+	 * @param model for html
+	 * @param search text to search on
+	 * @return page to move to
+	 */
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public String add(Model model, @ModelAttribute("search") Search search) {
 		System.out.println("Search = " + search.getText());
@@ -145,6 +199,10 @@ public class AccountController {
 		return "account.html";
 	}
 	
+	/**
+	 * base information for html every action
+	 * @param model for html
+	 */
 	private void buildModel(Model model) {
 		List<IncomeAndExpense> incomeAndExpenseList = createIncomeAndExpenseList();
 		
@@ -163,6 +221,10 @@ public class AccountController {
 		model.addAttribute("lastFourWeekData", getLastFourWeekData());
 	}
 
+	/**
+	 * displays income and expense list, also based on filters and searches
+	 * @return list of incomes and expenses
+	 */
 	private List<IncomeAndExpense> createIncomeAndExpenseList() {
 		List<IncomeAndExpense> incomeAndExpenseList = new ArrayList<>(account.getIncomeAndExpenseList());
 		if (filter == Filter.INCOME) {
@@ -187,6 +249,12 @@ public class AccountController {
 		
 		return incomeAndExpenseList;
 	}
+	
+	/**
+	 * grabbing values from lists to fill out graphs
+	 * @return data for graphs
+	 */
+	
 	private List<Double> getExpenseCategoryData() {
 		double education = 0.0;
 		double fees = 0.0;
@@ -214,6 +282,10 @@ public class AccountController {
 		return List.of(education, fees, food, groceries, travel, other);
 	}
 	
+	/**
+	 * grabbing values from lists to fill out graphs
+	 * @return data for graphs
+	 */
 	private List<Double> getIncomeCategoryData() {
 		double allowance = 0.0;
 		double work = 0.0;
@@ -232,6 +304,10 @@ public class AccountController {
 		return List.of(allowance, work, otherIncome);
 	}
 	
+	/**
+	 * grabbing values from lists to fill out graphs
+	 * @return data for graphs
+	 */
 	private List<Double> getLastSixMonthData() {
 		double october = 0.0;
 		double november = 0.0;
@@ -283,7 +359,10 @@ public class AccountController {
 		return List.of(october, november, december, janurary, feburary, march);
 	}
 	
-	
+	/**
+	 * grabbing values from lists to fill out graphs
+	 * @return data for graphs
+	 */
 	private List<Double> getLastFourWeekData() {
 		double thisWeek = 0.0;
 		double lastWeek = 0.0;
@@ -321,6 +400,12 @@ public class AccountController {
 		
 		return List.of(fourWeeksAgo, threeWeeksAgo, lastWeek, thisWeek);
 	}
+	
+	/**
+	 * set examples for demo
+	 * @param model for demo
+	 * @return demo info
+	 */
 	
 	@GetMapping("/demo")
 	public String demo(Model model) {
