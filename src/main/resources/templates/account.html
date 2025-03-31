@@ -13,24 +13,36 @@
 			crossorigin="anonymous">
 			
 		<!-- Using JavaScript to make calendars work, and disabled incorrect categories for either incomes or expenses. -->
-		<script>
-			$( function() {
-				$( "#datepicker" ).datepicker({ maxDate: 0 });
-				$( "#datepickerstart" ).datepicker();
-				$( "#datepickerend" ).datepicker();
-			});
-		
-			$(document).ready(function() {
-				$('input:radio[name=income]').change(function() {
-					$("#category").prop("selectedIndex", 0);
-					document.querySelectorAll("#category option").forEach(opt => {
-						if (opt.value != "" && opt.value != "separator") {
-							opt.disabled = !opt.disabled;
-						}
-					});
-				});
-			});
-		</script>
+		        <script>
+            $( function() {
+                $( "#datepicker" ).datepicker({ maxDate: 0 });
+                $( "#datepickerstart" ).datepicker();
+                $( "#datepickerend" ).datepicker();
+            });
+            
+            function addHelp() {
+                alert("Need help adding an Income or Expense?\n1. Select whether it's income or expense.\n2. Enter the amount.\n3. Pick a category.\n4. Select a date.\n5. Click Confirm.");
+            }
+
+            function searchHelp() {
+                alert("Need help searching?\n1. Type in the category you would like to search for.\n2. Select a range of dates.\n3. Click Search.\n4. Select whether you would like to search for everything, just incomes, or just expenses.\n5 View the table!");
+            }
+
+            function tableHelp() {
+                alert("Need help understanding, editing, and deleting each part of the table?\n1. The leftmost column displays the date that the income or expense was put in as.\n2. The middle column displays the amount of money that the income or expense held.\n3. The rightmost column dispays the category that the income or expense was selected as.\n4. To the right of the category column, there is a small pencil to edit each transaction. Click the pencil, and the traction will fill out the table above with the same details that were there when you put it in. Edit whatever you desire, press edit, and the transaction will be changed in the list.\n5 To the right of the pencil, there is a small trash can to delete each transaction. Click the pencil, and the transaction that goes along with the can will be deleted.");
+            }
+        
+            $(document).ready(function() {
+                $('input:radio[name=income]').change(function() {
+                    $("#category").prop("selectedIndex", 0);
+                    document.querySelectorAll("#category option").forEach(opt => {
+                        if (opt.value != "" && opt.value != "separator") {
+                            opt.disabled = !opt.disabled;
+                        }
+                    });
+                });
+            });
+        </script>
 		
 		<!-- Using CSS style sheets to organize and make the website look nice -->
 		<style>
@@ -78,7 +90,9 @@
 				<!-- The main table to add either a new income or expense. Includes a radio button to pick either an income or expense, a text box to put in the amount,
 				 a category drop down with nine total options, and a date selector. Submit button to submit. Edit and cancel buttons while editing. -->
 				<h3> Enter a new Income or Expense? </h3>
-				<br>
+				<div style="margin-left: 180px">
+                    <button onclick="addHelp()"> Help Me! </button>
+                </div>
 				<form action="#" th:action="@{/add}" th:object="${income}" method="post">
 					<table border="2">
 						<tr>
@@ -126,7 +140,9 @@
 				
 				<!-- Search Bar. Checking if an ID's category contains the same character's as the search bar. -->
 				<h4> Search </h4>
-				<br>
+                <div style="margin-left: 85px">
+                    <button onclick="searchHelp()"> Help Me! </button>
+                </div>
 				<form action="#" th:action="@{/search}" th:object="${search}" method="post">
 					<input type="text" th:field="*{text}" th:value="${search.text}" placeholder="Search" /> 
 					<br> 
@@ -156,6 +172,9 @@
 						th:disabled="${filter == T(org.fbla.caden.model.Filter).EXPENSE}">Expense</button>
 				</form>
 				<br>
+                <div style="margin-left: 115px">
+                    <button onclick="tableHelp()"> Help Me! </button>
+                </div>
 				
 				<!-- Table to show past incomes and expenses. Finds an ID and displays it. -->
 				<table>
